@@ -71,26 +71,32 @@ public class TeamServiceImpl implements TeamService {
         if(teamRepository.existsById(id))
         {teamRepository.deleteById(id);
             return String.format("The team with id=%d is deleted", id);}
-        else return String.format("Deleting of team with id=%d is impossible: this team is absent in DB", id);
+        return String.format("Deleting of team with id=%d is impossible: this team is absent in DB", id);
     }
 
     @Override
     public String isTeamComplete (int teamId) {
         int playersCount = teamRepository.getPlayersCountByTeamIdParam(teamId);
+        if(teamRepository.existsById(teamId))
         return playersCount>=11 ?
                String.format("There are %d players in team with id=%d, so this team is complete", playersCount, teamId) :
                String.format("There are %d players in team with id=%d, so this team is not complete", playersCount, teamId);
+        return String.format("Completeness check of team with id=%d is impossible: this team is absent in DB", teamId);
     }
 
     @Override
     public List<PlayerDto> findAllPlayersByTeamName(String teamName) {
-        return teamRepository.findAllByTeamId(teamRepository.findByTeamName(teamName).getTeamId())
+        if(teamRepository.existsById(teamRepository.findByTeamName(teamName).getTeamId()))
+        return teamRepository.findAllPlayersByTeamId(teamRepository.findByTeamName(teamName).getTeamId())
                 .stream().map(Player::toDto).collect(Collectors.toList());
+        return null;
     }
 
     @Override
     public List<PlayerDto> findAllPlayersByTeamNameAndPosition(String teamName, String position) {
-        return teamRepository.findAllByTeamIdAndPosition(teamRepository.findByTeamName(teamName).getTeamId(), position)
+        if(teamRepository.existsById(teamRepository.findByTeamName(teamName).getTeamId()))
+        return teamRepository.findAllPlayersByTeamIdAndPosition(teamRepository.findByTeamName(teamName).getTeamId(), position)
                 .stream().map(Player::toDto).collect(Collectors.toList());
+        return null;
     }
 }

@@ -1,11 +1,10 @@
 package org.example.db.entity;
 
 import org.example.dto.TeamDto;
-import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Entity
@@ -25,9 +24,7 @@ public class Team {
     @Column(name = "country")
     private String country;
 
-    @JoinColumn(name = "id_team")
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-//    @Cascade(value = org.hibernate.annotations.CascadeType.ALL)
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Player> players;
 
     public Team() {
@@ -93,6 +90,16 @@ public class Team {
     public void setPlayers(List<Player> players) {
         this.players = players;
     }
+
+//    public void addPlayer(Player player) {
+//        players.add(player);
+//        player.setTeam(this);
+//    }
+//
+//    public void removePlayer(Player player) {
+//        players.remove(player);
+//        player.setTeam(null);
+//    }
 
     public TeamDto toDto (){
         return new TeamDto(getTeamId(), getTeamName(), getCity(), getCountry(),

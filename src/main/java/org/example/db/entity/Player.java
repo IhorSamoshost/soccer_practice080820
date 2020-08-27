@@ -19,8 +19,9 @@ public class Player {
     @Column(name = "position")
     private String position;
 
-    @Column(name = "id_team")
-    private int teamId;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_team")
+    private Team team;
 
     public Player() {
     }
@@ -36,11 +37,11 @@ public class Player {
         this.position = position;
     }
 
-    public Player(int playerId, String playerName, String position, int teamId) {
+    public Player(int playerId, String playerName, String position, Team team) {
         this.playerId = playerId;
         this.playerName = playerName;
         this.position = position;
-        this.teamId = teamId;
+        this.team = team;
     }
 
     public int getPlayerId() {
@@ -67,16 +68,16 @@ public class Player {
         this.position = position;
     }
 
-    public int getTeamId() {
-        return teamId;
+    public Team getTeam() {
+        return team;
     }
 
-    public void setTeamId(int teamId) {
-        this.teamId = teamId;
+    public void setTeam(Team team) {
+        this.team = team;
     }
 
     public PlayerDto toDto(){
-        return new PlayerDto(getPlayerId(), getPlayerName(), getPosition(), getTeamId());
+        return new PlayerDto(getPlayerId(), getPlayerName(), getPosition(), getTeam().toDto());
     }
 
 //    @Override
@@ -101,7 +102,7 @@ public class Player {
                 "playerId=" + playerId +
                 ", playerName='" + playerName + '\'' +
                 ", position='" + position + '\'' +
-                ", teamId=" + teamId +
+                ", teamId=" + team.getTeamId() +
                 '}';
     }
 }

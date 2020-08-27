@@ -1,12 +1,13 @@
 package org.example.dto;
 
 import org.example.db.entity.Player;
+import org.example.db.entity.Team;
 
 public class PlayerDto {
     private int playerId;
     private String playerName;
     private String position;
-    private int teamId;
+    private TeamDto team;
 
     public PlayerDto() {
             }
@@ -16,17 +17,17 @@ public class PlayerDto {
         this.position = position;
     }
 
-    public PlayerDto(String playerName, String position, int teamId) {
+    public PlayerDto(String playerName, String position, TeamDto team) {
         this.playerName = playerName;
         this.position = position;
-        this.teamId = teamId;
+        this.team = team;
     }
 
-    public PlayerDto(int playerId, String playerName, String position, int teamId) {
+    public PlayerDto(int playerId, String playerName, String position, TeamDto team) {
         this.playerId = playerId;
         this.playerName = playerName;
         this.position = position;
-        this.teamId = teamId;
+        this.team = team;
     }
 
     public int getPlayerId() {
@@ -53,14 +54,14 @@ public class PlayerDto {
         this.position = position;
     }
 
-    public int getTeamId() { return teamId; }
+    public TeamDto getTeam() { return team; }
 
-    public void setTeamId(int teamId) {
-        this.teamId = teamId;
+    public void setTeam(TeamDto team) {
+        this.team = team;
     }
 
     public Player toEntity(){
-        return new Player(getPlayerId(), getPlayerName(), getPosition());
+        return new Player(getPlayerId(), getPlayerName(), getPosition(), getTeam().toEntity());
     }
 
     @Override
@@ -69,7 +70,7 @@ public class PlayerDto {
                 "playerId=" + playerId +
                 ", playerName='" + playerName + '\'' +
                 ", position='" + position + '\'' +
-                ", teamId=" + teamId +
+                ", teamId=" + team.getTeamId() +
                 '}';
     }
 }
