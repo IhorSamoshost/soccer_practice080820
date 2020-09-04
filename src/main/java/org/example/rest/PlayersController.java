@@ -1,7 +1,7 @@
 package org.example.rest;
 
 import org.example.dto.PlayerDto;
-import org.example.service.PlayerService;
+import org.example.service.SoccerService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -9,34 +9,34 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "players")
 public class PlayersController {
-    private final PlayerService playerService;
+    private final SoccerService soccerService;
 
-    public PlayersController(PlayerService playerService) {
-        this.playerService = playerService;
+    public PlayersController(SoccerService soccerService) {
+        this.soccerService = soccerService;
     }
 
     @GetMapping
     public List<PlayerDto> findAllPlayers() {
-        return playerService.findAllPlayers();
+        return soccerService.findAllPlayers();
     }
 
     @GetMapping("{id}")
     public PlayerDto findByPlayerId(@PathVariable(value = "id") int playerId) {
-        return playerService.findPlayerById(playerId);
+        return soccerService.findPlayerById(playerId);
     }
 
     @PostMapping
     public String createPlayer(@RequestBody PlayerDto playerDto) {
-        return playerService.savePlayer(playerDto);
+        return soccerService.savePlayer(playerDto);
     }
 
     @PutMapping
     public String updatePlayer(@RequestBody PlayerDto playerDto) {
-        return playerService.updatePlayer(playerDto);
+        return soccerService.updatePlayer(playerDto);
     }
 
     @DeleteMapping("{id}")
     public String deletePlayer(@PathVariable(value = "id") int playerId) {
-        return playerService.deletePlayer(playerId);
+        return soccerService.deletePlayer(playerId);
     }
 }

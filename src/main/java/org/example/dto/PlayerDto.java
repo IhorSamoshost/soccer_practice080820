@@ -1,33 +1,38 @@
 package org.example.dto;
 
 import org.example.db.entity.Player;
-import org.example.db.entity.Team;
 
 public class PlayerDto {
     private int playerId;
     private String playerName;
     private String position;
-    private TeamDto team;
+    private int teamId;
 
     public PlayerDto() {
-            }
+    }
 
     public PlayerDto(String playerName, String position) {
         this.playerName = playerName;
         this.position = position;
     }
 
-    public PlayerDto(String playerName, String position, TeamDto team) {
+    public PlayerDto(String playerName, String position, int teamId) {
         this.playerName = playerName;
         this.position = position;
-        this.team = team;
+        this.teamId = teamId;
     }
 
-    public PlayerDto(int playerId, String playerName, String position, TeamDto team) {
+    public PlayerDto(int playerId, String playerName, String position) {
         this.playerId = playerId;
         this.playerName = playerName;
         this.position = position;
-        this.team = team;
+    }
+
+    public PlayerDto(int playerId, String playerName, String position, int teamId) {
+        this.playerId = playerId;
+        this.playerName = playerName;
+        this.position = position;
+        this.teamId = teamId;
     }
 
     public int getPlayerId() {
@@ -54,14 +59,17 @@ public class PlayerDto {
         this.position = position;
     }
 
-    public TeamDto getTeam() { return team; }
-
-    public void setTeam(TeamDto team) {
-        this.team = team;
+    public int getTeamId() {
+        return teamId;
     }
 
-    public Player toEntity(){
-        return new Player(getPlayerId(), getPlayerName(), getPosition(), getTeam().toEntity());
+    public void setTeamId(int teamId) {
+        this.teamId = teamId;
+    }
+
+    public Player toEntity() {
+        return getPlayerId() != 0 ? new Player(getPlayerId(), getPlayerName(), getPosition())
+                : new Player(getPlayerName(), getPosition());
     }
 
     @Override
@@ -70,7 +78,7 @@ public class PlayerDto {
                 "playerId=" + playerId +
                 ", playerName='" + playerName + '\'' +
                 ", position='" + position + '\'' +
-                ", teamId=" + team.getTeamId() +
+                ", teamId=" + teamId +
                 '}';
     }
 }

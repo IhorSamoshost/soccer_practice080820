@@ -25,12 +25,19 @@ public class Team {
     private String country;
 
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Player> players;
+    private List<Player> players = new ArrayList<>();
 
     public Team() {
     }
 
     public Team(String teamName, String city, String country) {
+        this.teamName = teamName;
+        this.city = city;
+        this.country = country;
+    }
+
+    public Team(int teamId, String teamName, String city, String country) {
+        this.teamId = teamId;
         this.teamName = teamName;
         this.city = city;
         this.country = country;
@@ -91,37 +98,20 @@ public class Team {
         this.players = players;
     }
 
-//    public void addPlayer(Player player) {
-//        players.add(player);
-//        player.setTeam(this);
-//    }
-//
-//    public void removePlayer(Player player) {
-//        players.remove(player);
-//        player.setTeam(null);
-//    }
+    public void addPlayer(Player player) {
+        players.add(player);
+        player.setTeam(this);
+    }
 
-    public TeamDto toDto (){
+    public void removePlayer(Player player) {
+        players.remove(player);
+        player.setTeam(null);
+    }
+
+    public TeamDto toDto() {
         return new TeamDto(getTeamId(), getTeamName(), getCity(), getCountry(),
                 getPlayers().stream().map(Player::toDto).collect(Collectors.toList()));
     }
-
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (!(o instanceof Team)) return false;
-//        Team team = (Team) o;
-//        return getTeamId() == team.getTeamId() &&
-//                getTeamName().equals(team.getTeamName()) &&
-//                Objects.equals(getCity(), team.getCity()) &&
-//                Objects.equals(getCountry(), team.getCountry()) &&
-//                Objects.equals(getPlayers(), team.getPlayers());
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(getTeamId(), getTeamName(), getCity(), getCountry(), getPlayers());
-//    }
 
     @Override
     public String toString() {

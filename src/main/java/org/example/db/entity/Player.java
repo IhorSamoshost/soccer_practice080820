@@ -1,10 +1,11 @@
 package org.example.db.entity;
 
 import org.example.dto.PlayerDto;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
-import java.util.Objects;
 
+@Component
 @Entity
 @Table(name = "player_table")
 public class Player {
@@ -19,7 +20,7 @@ public class Player {
     @Column(name = "position")
     private String position;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name = "id_team")
     private Team team;
 
@@ -39,6 +40,12 @@ public class Player {
 
     public Player(int playerId, String playerName, String position, Team team) {
         this.playerId = playerId;
+        this.playerName = playerName;
+        this.position = position;
+        this.team = team;
+    }
+
+    public Player(String playerName, String position, Team team) {
         this.playerName = playerName;
         this.position = position;
         this.team = team;
@@ -76,25 +83,23 @@ public class Player {
         this.team = team;
     }
 
-    public PlayerDto toDto(){
-        return new PlayerDto(getPlayerId(), getPlayerName(), getPosition(), getTeam().toDto());
+    public PlayerDto toDto() {
+        return this.team != null ?
+                new PlayerDto(getPlayerId(), getPlayerName(), getPosition(), this.team.getTeamId()) :
+                new PlayerDto(getPlayerId(), getPlayerName(), getPosition());
     }
 
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (!(o instanceof Player)) return false;
-//        Player player = (Player) o;
-//        return getPlayerId() == player.getPlayerId() &&
-//                getTeamId() == player.getTeamId() &&
-//                getPlayerName().equals(player.getPlayerName()) &&
-//                Objects.equals(getPosition(), player.getPosition());
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(getPlayerId(), getPlayerName(), getPosition(), getTeamId());
-//    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Player)) return false;
+        return playerId == ((Player) o).getPlayerId();
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
+    }
 
     @Override
     public String toString() {

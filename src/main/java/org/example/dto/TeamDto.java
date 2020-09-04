@@ -2,6 +2,7 @@ package org.example.dto;
 
 import org.example.db.entity.Team;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -12,7 +13,8 @@ public class TeamDto {
     private String country;
     private List<PlayerDto> players;
 
-    public TeamDto() { }
+    public TeamDto() {
+    }
 
     public TeamDto(String teamName, String city, String country) {
         this.teamName = teamName;
@@ -75,9 +77,10 @@ public class TeamDto {
         this.players = players;
     }
 
-    public Team toEntity (){
-        return new Team(getTeamId(), getTeamName(), getCity(), getCountry(),
-                getPlayers().stream().map(PlayerDto::toEntity).collect(Collectors.toList()));
+    public Team toEntity() {
+        return getPlayers() != null ? new Team(getTeamId(), getTeamName(), getCity(), getCountry(),
+                getPlayers().stream().map(PlayerDto::toEntity).collect(Collectors.toList())) :
+                new Team(getTeamId(), getTeamName(), getCity(), getCountry(), new ArrayList<>());
     }
 
     @Override
